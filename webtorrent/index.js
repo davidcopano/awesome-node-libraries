@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const client = new WebTorrent();
 const torrentUri = 'https://webtorrent.io/torrents/big-buck-bunny.torrent';
 
-client.add(torrentUri, function (torrent) {
+client.add(torrentUri, (torrent) => {
   console.log(chalk.blue(`Descargando el torrent '${torrent.name}'...`));
 
   torrent.on('download', (bytes) => {
@@ -13,6 +13,7 @@ client.add(torrentUri, function (torrent) {
 
     if(progressPercentage >= 100) {
       console.log(chalk.green(`Terminado! Se ha descargado en la siguiente carpeta: ${torrent.path}`));
+      process.exit(1);
     }
   })
 });

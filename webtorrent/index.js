@@ -1,15 +1,17 @@
 var WebTorrent = require('webtorrent');
 
 var client = new WebTorrent();
-var magnetURI = '...';
+var torrentUri = 'https://webtorrent.io/torrents/big-buck-bunny.torrent';
 
-client.add(magnetURI, function (torrent) {
-  // Got torrent metadata!
-  console.log('Client is downloading:', torrent.infoHash)
+client.add(torrentUri, function (torrent) {
+  console.log(`Descargando el torrent '${torrent.name}'...`)
 
-  torrent.files.forEach(function (file) {
-    // Display the file by appending it to the DOM. Supports video, audio, images, and
-    // more. Specify a container element (CSS selector or reference to DOM node).
-    file.appendTo('body')
-  });
+  torrent.on('download', (bytes) => {
+    console.log(`Progreso: ${(torrent.progress * 100).toFixed(2)}`);
+
+    if(torrent.progress === 1) {
+      console.log('Terminado!');
+      console.log(torrent.path);
+    }
+  })
 });
